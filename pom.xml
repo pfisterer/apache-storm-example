@@ -54,7 +54,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<mainClass>de.farberg.apollo.OpenWire</mainClass>
+					<mainClass>de.farberg.storm.examples.StormWordCount</mainClass>
 				</configuration>
 			</plugin>
 
