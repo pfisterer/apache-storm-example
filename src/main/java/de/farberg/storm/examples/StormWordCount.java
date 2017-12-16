@@ -28,7 +28,8 @@ public class StormWordCount {
 
 		@Override
 		public void execute(Tuple input, BasicOutputCollector collector) {
-			Arrays.stream(input.getString(0).split(" ")).forEach(word -> collector.emit(new Values(word)));
+			Arrays.stream(input.getString(0).split(" ")).
+			forEach(word -> collector.emit(new Values(word)));
 		}
 
 		@Override
@@ -64,8 +65,10 @@ public class StormWordCount {
 		private static final long serialVersionUID = 1L;
 		private SpoutOutputCollector _collector;
 		private Random _rand;
-		private static final String[] sentences = new String[] { "the cow jumped over the moon", "an apple a day keeps the doctor away",
-				"four score and seven years ago", "snow white and the seven dwarfs", "i am at two with nature" };
+		private static final String[] sentences = new String[] 
+				{ "the cow jumped over the moon", "an apple a day keeps the doctor away",
+				"four score and seven years ago", "snow white and the seven dwarfs", 
+				"i am at two with nature" };
 
 		@Override
 		public void open(@SuppressWarnings("rawtypes") Map conf, TopologyContext context, SpoutOutputCollector collector) {
@@ -90,7 +93,7 @@ public class StormWordCount {
 
 		@Override
 		public void declareOutputFields(OutputFieldsDeclarer declarer) {
-			declarer.declare(new Fields("word"));
+			declarer.declare(new Fields("sentence"));
 		}
 
 	}
@@ -100,8 +103,13 @@ public class StormWordCount {
 		TopologyBuilder builder = new TopologyBuilder();
 
 		builder.setSpout("spout", new StormRandomSentenceSpout(), 5);
-		builder.setBolt("split", new SplitSentence(), 10).shuffleGrouping("spout");
-		builder.setBolt("count", new WordCount(), 10).fieldsGrouping("split", new Fields("word"));
+		builder
+			.setBolt("split", new SplitSentence(), 10)
+				.shuffleGrouping("spout");
+		
+		builder
+			.setBolt("count", new WordCount(), 10)
+			.fieldsGrouping("split", new Fields("word"));
 
 		Config conf = new Config();
 		conf.setDebug(true);
